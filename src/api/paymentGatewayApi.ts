@@ -54,7 +54,9 @@ export const paymentGatewayApi = {
     return data!.paymentTransactions;
   },
   withdraw: async (amount: number) => {
-    const { data } = await client.mutate({
+    const { data } = await client.mutate<{
+      withdraw: { id: number; balance: number };
+    }>({
       mutation: WITHDRAW,
       variables: { amount },
     });

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { LIST_MESSAGES, Message } from '../../api/chatApi';
+import { LIST_MESSAGES, type Message } from '../../api/chatApi';
 import { wsClient } from '../../api/wsClient';
 import { useChatStore } from '../../store/chatStore';
 
@@ -44,7 +44,7 @@ export default function ChatRoom() {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        {messages.map((m) => (
+        {messages.map((m: Message) => (
           <div key={m.id} className="border p-2">
             <strong>{m.author.username}:</strong> {m.content}
           </div>

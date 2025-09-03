@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Notification, notificationsApi } from '../api/notificationsApi';
+import { notificationsApi, type Notification } from '../api/notificationsApi';
 
 interface NotificationsState {
   notifications: Notification[];
@@ -17,12 +17,12 @@ export const useNotificationsStore = create<NotificationsState>((set) => ({
   markRead: async (id: number) => {
     await notificationsApi.markNotificationRead(id);
     set((state) => ({
-      notifications: state.notifications.map((n) =>
+      notifications: state.notifications.map((n: Notification) =>
         n.id === id ? { ...n, isRead: true } : n,
       ),
     }));
   },
-  addNotification: (n) =>
+  addNotification: (n: Notification) =>
     set((state) => ({ notifications: [n, ...state.notifications] })),
 }));
 

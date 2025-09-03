@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { AxiosRequestHeaders } from 'axios';
 import { useAuthStore } from '../store/authStore';
 
 const api = axios.create({ baseURL: '/api/auth' });
@@ -7,9 +8,9 @@ api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
   if (token) {
     config.headers = {
-      ...config.headers,
+      ...(config.headers as AxiosRequestHeaders),
       Authorization: `Bearer ${token}`,
-    };
+    } as AxiosRequestHeaders;
   }
   return config;
 });
