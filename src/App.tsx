@@ -1,29 +1,36 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { useEffect } from 'react';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import ResetPasswordRequest from './pages/ResetPasswordRequest';
-import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
-import Logout from './pages/Logout';
-import ProjectsList from './pages/projects/ProjectsList';
-import ProjectDetail from './pages/projects/ProjectDetail';
-import CreateProject from './pages/projects/CreateProject';
-import PrivateRoute from './components/PrivateRoute';
-import Wallet from './pages/payments/Wallet';
-import Transactions from './pages/payments/Transactions';
-import Transfer from './pages/payments/Transfer';
-import Deposit from './pages/payments/Deposit';
-import Withdraw from './pages/payments/Withdraw';
-import ChatList from './pages/chat/ChatList';
-import ChatRoom from './pages/chat/ChatRoom';
-import NotificationsList from './components/NotificationsList';
-import UsersAdmin from './pages/admin/UsersAdmin';
-import ProjectsAdmin from './pages/admin/ProjectsAdmin';
-import BidsAdmin from './pages/admin/BidsAdmin';
-import ReviewsAdmin from './pages/admin/ReviewsAdmin';
-import TransactionsAdmin from './pages/admin/TransactionsAdmin';
-import { useNotificationsStore } from './store/notificationsStore';
-import { useAuthStore } from './store/authStore';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useEffect } from "react";
+
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import ResetPasswordRequest from "./pages/ResetPasswordRequest";
+import ResetPasswordConfirm from "./pages/ResetPasswordConfirm";
+import Logout from "./pages/Logout";
+import ProjectsList from "./pages/projects/ProjectsList";
+import ProjectDetail from "./pages/projects/ProjectDetail";
+import CreateProject from "./pages/projects/CreateProject";
+import PrivateRoute from "./components/PrivateRoute";
+
+import Wallet from "./pages/payments/Wallet";
+import Transactions from "./pages/payments/Transactions";
+import Transfer from "./pages/payments/Transfer";
+import Deposit from "./pages/payments/Deposit";
+import Withdraw from "./pages/payments/Withdraw";
+
+import ChatList from "./pages/chat/ChatList";
+import ChatRoom from "./pages/chat/ChatRoom";
+
+import NotificationsList from "./components/NotificationsList";
+
+import UsersAdmin from "./pages/admin/UsersAdmin";
+import ProjectsAdmin from "./pages/admin/ProjectsAdmin";
+import BidsAdmin from "./pages/admin/BidsAdmin";
+import ReviewsAdmin from "./pages/admin/ReviewsAdmin";
+import TransactionsAdmin from "./pages/admin/TransactionsAdmin";
+
+import { useNotificationsStore } from "./store/notificationsStore";
+import { useAuthStore } from "./store/authStore";
+import { WS_BASE } from "./config"; // 🔹 добавлен конфиг
 
 export default function App() {
   const notifications = useNotificationsStore((state) => state.notifications);
@@ -32,7 +39,7 @@ export default function App() {
 
   useEffect(() => {
     if (!token) return;
-    const socket = new WebSocket('ws://localhost:8000/ws/notifications/');
+    const socket = new WebSocket(`${WS_BASE}/ws/notifications/`);
     socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
@@ -58,7 +65,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <nav className="p-4 flex justify-between bg-gray-100">
-        <Link to="/projects" className="font-bold">
+        <Link to="/" className="font-bold">
           Freelance Codex
         </Link>
         <Link to="/notifications" className="relative">
@@ -72,7 +79,12 @@ export default function App() {
           )}
         </Link>
       </nav>
+
       <Routes>
+        {/* 🔹 корневой маршрут */}
+        <Route path="/" element={<ProjectsList />} />
+
+        {/* Auth */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPasswordRequest />} />
@@ -85,6 +97,8 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Wallet */}
         <Route
           path="/wallet"
           element={
@@ -125,6 +139,8 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Chat */}
         <Route
           path="/chat"
           element={
@@ -141,6 +157,8 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Projects */}
         <Route path="/projects" element={<ProjectsList />} />
         <Route
           path="/projects/new"
@@ -151,6 +169,8 @@ export default function App() {
           }
         />
         <Route path="/projects/:id" element={<ProjectDetail />} />
+
+        {/* Notifications */}
         <Route
           path="/notifications"
           element={
@@ -159,6 +179,8 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Admin */}
         <Route
           path="/admin/users"
           element={
