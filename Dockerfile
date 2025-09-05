@@ -16,5 +16,5 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
-# подставляем $PORT и запускаем nginx
+# Подменяем порт 80 на $PORT и запускаем nginx
 CMD ["sh", "-c", "sed -i \"s/80/${PORT}/g\" /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
