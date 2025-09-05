@@ -2,7 +2,10 @@ import axios from 'axios';
 import type { AxiosRequestHeaders } from 'axios';
 import { useAuthStore } from '../store/authStore';
 
-const api = axios.create({ baseURL: '/api/auth' });
+// Берём API URL из env
+const api = axios.create({
+  baseURL: `${import.meta.env.VITE_API_URL}/api/auth`,
+});
 
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
