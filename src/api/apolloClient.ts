@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { GRAPHQL_URL } from "../config";  // ✅ теперь берём из config.ts
 
 export const client = new ApolloClient({
-  uri: import.meta.env.VITE_API_URL + "/graphql",
+  uri: GRAPHQL_URL,
   cache: new InMemoryCache(),
 });
