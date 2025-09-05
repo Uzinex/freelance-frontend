@@ -2,11 +2,9 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# Устанавливаем зависимости
 COPY package*.json ./
 RUN npm ci
 
-# Копируем исходники и собираем
 COPY . .
 RUN npm run build
 
@@ -16,11 +14,10 @@ FROM nginx:alpine
 # Копируем билд в nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Копируем конфиг nginx
+# Копируем кастомный конфиг nginx (если есть)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Открываем порт
 EXPOSE 80
 
-# Запуск nginx
+# ВАЖНО: явно указываем команду запуска
 CMD ["nginx", "-g", "daemon off;"]
