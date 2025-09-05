@@ -11,13 +11,13 @@ RUN npm run build
 # --- Stage 2: Run with nginx ---
 FROM nginx:alpine
 
-# Копируем билд в nginx
+# Копируем билд
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Копируем кастомный конфиг nginx (если есть)
+# Копируем кастомный конфиг nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
-# ВАЖНО: явно указываем команду запуска
+# ВАЖНО: запускаем nginx, а не npm
 CMD ["nginx", "-g", "daemon off;"]
